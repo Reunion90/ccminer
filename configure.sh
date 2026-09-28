@@ -1,8 +1,25 @@
 #!/bin/bash
 
 ARCH="-march=armv8-a+crypto+sha2+crc"
-CORE="-mtune=cortex-a73 -mtune=cortex-a53"
-OPTI="-Ofast -pthread -fopenmp -flto -fstrict-aliasing -ftree-vectorize -funroll-loops -ffinite-loops -finline-functions -fno-stack-protector -fomit-frame-pointer -fpic -falign-functions=64 -D_REENTRANT"
+TUNE="-mtune=cortex-a73"
 
-./configure CXXFLAGS="$ARCH $CORE $OPTI" CFLAGS="$ARCH $CORE $OPTI" \
-CXX=clang++ CC=clang  LDFLAGS="-Wl,-hugetlbfs-align -fuse-ld=lld"
+OPTI="-O3 \
+-ffinite-loops \
+-ffast-math \
+-fstrict-aliasing \
+-ftree-vectorize \
+-funroll-loops \
+-finline-functions \
+-fomit-frame-pointer \
+-fno-stack-protector \
+-fpic \
+-pthread \
+-flto \
+-D_REENTRANT"
+
+./configure \
+    CFLAGS="$ARCH $TUNE $OPTI" \
+    CXXFLAGS="$ARCH $TUNE $OPTI" \
+    CXX=clang++ \
+    CC=clang \
+    LDFLAGS="-flto -fuse-ld=lld"
